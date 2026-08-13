@@ -199,7 +199,18 @@
       container = container.parentElement;
       if (group.every((g) => container.contains(g))) break;
     }
-    return leadingText(container, group[0]);
+    // The heading usually sits ABOVE the element that wraps the options rather than inside it, so
+    // the smallest common ancestor often contains no text at all. Keep climbing until one yields
+    // something. Without this the group question comes back empty, discover() falls back to
+    // labelFor(firstRadio), and the question is recorded as the first OPTION - literally "A" for
+    // an A/B/C/D group, and "May/June 2026 (recent graduate)" for a graduation-date question.
+    // Both sat in the pending queue unanswerable, because what was being asked was never captured.
+    for (let i = 0; i < 4 && container; i++) {
+      const q = leadingText(container, group[0]);
+      if (q) return q;
+      container = container.parentElement;
+    }
+    return '';
   }
 
   /** Find Yes/No (and similar) button groups that behave as radios. */
