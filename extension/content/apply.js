@@ -118,12 +118,33 @@
         continue;
       }
       const r = await fillOne(f, spec.value);
+      // A write that lands is not the same as a write that belongs. On 2026-08-13 a label-scoping
+      // bug matched the full-name rule against the name, email AND phone inputs, and all three
+      // reported ok because the value stuck. Verification cannot catch that - it compares what was
+      // written against what is there, and both agree. So check the value against the control's
+      // own declared type, which is the one thing the page asserts independently of its labels.
+      const implausible = r.ok ? implausibleFor(f, spec.value) : null;
       log.fields.push({
-        q: f.question, want: spec.value, got: r.got, ok: r.ok, rule: spec.id, note: r.note,
-        kind: f.kind, el: f.el, group: f.options,
+        q: f.question, want: spec.value, got: r.got, ok: r.ok && !implausible, rule: spec.id,
+        note: implausible || r.note, kind: f.kind, el: f.el, group: f.options,
       });
-      if (r.ok) log.filled++;
+      if (r.ok && !implausible) log.filled++;
     }
+
+    // One rule writing the same value into several text fields is the signature of a mis-scoped
+    // label. It is not proof - "confirm email" legitimately repeats - so this flags for review
+    // rather than failing the fields outright.
+    const byValue = new Map();
+    for (const rec of log.fields) {
+      if (!rec.ok || rec.kind !== 'text') continue;
+      const value = String(rec.want == null ? '' : rec.want).trim();
+      if (!value) continue;
+      const k = JSON.stringify([rec.rule, value.toLowerCase()]);
+      const hit = byValue.get(k) || { rule: rec.rule, value, questions: [] };
+      hit.questions.push(rec.q);
+      byValue.set(k, hit);
+    }
+    log.duplicates = [...byValue.values()].filter((d) => d.questions.length > 1);
 
     // --- 5. verification pass --------------------------------------------
     //
@@ -162,15 +183,18 @@
     // filled zero fields and reported "filled and saved - submit is yours". A broken
     // destination has to look different from a working one.
     const filledNothing = log.filled === 0;
+    // One value in several fields never submits unreviewed. It is the shape of a mis-scoped label,
+    // and verification agrees with it by construction, so the gate has to know about it separately.
+    const duplicated = (log.duplicates || []).length > 0;
     const canSubmit = mode === 'auto' && armed && log.verified && !filledNothing
-      && requiredUnfilled.length === 0;
+      && !duplicated && requiredUnfilled.length === 0;
 
     if (!canSubmit) {
       return {
         ok: true,
         submitted: false,
-        needsReview: !log.verified || requiredUnfilled.length > 0 || filledNothing,
-        reason: reasonNotSubmitted({ mode, armed, verified: log.verified, requiredUnfilled, filledNothing }),
+        needsReview: !log.verified || requiredUnfilled.length > 0 || filledNothing || duplicated,
+        reason: reasonNotSubmitted({ mode, armed, verified: log.verified, requiredUnfilled, filledNothing, duplicates: log.duplicates }),
         log,
       };
     }
@@ -195,11 +219,15 @@
    * ones flagged for review, so the run log said the same thing whether the fill had worked or
    * not. Assist now reports its own problems.
    */
-  function reasonNotSubmitted({ mode, armed, verified, requiredUnfilled, filledNothing }) {
+  function reasonNotSubmitted({ mode, armed, verified, requiredUnfilled, filledNothing, duplicates }) {
     const unanswered = () => requiredUnfilled.map((x) => x.f.question).join(' | ');
 
     if (filledNothing) {
       return 'nothing was filled - no field on this page matched the profile, so this is probably not the application form';
+    }
+    if (duplicates && duplicates.length) {
+      const d = duplicates[0];
+      return `the same value ("${d.value}") went into ${d.questions.length} different fields - the labels on this form are probably being read wrong, check it before submitting`;
     }
     if (mode !== 'auto') {
       if (!verified) return 'filled, but some values did not stick - check the form before submitting';
@@ -282,6 +310,39 @@
 
     const now = readBack(rec.el);
     return same(now, rec.got) ? { status: 'ok' } : { status: 'changed', got: now };
+  }
+
+  /**
+   * Does this value contradict what the control says it holds?
+   *
+   * Deliberately narrow. It only fires on the cases the page itself declares - an `input[type=email]`
+   * that got something without an "@", a phone field that got something without digits - so it
+   * cannot argue with a question it does not understand. That is enough to catch a mis-scoped
+   * label writing a person's name into the email and phone inputs, which is exactly how the
+   * Sports Reference run failed while reporting five fields filled and ok.
+   *
+   * Returns a note explaining the refusal, or null if the value is plausible.
+   */
+  function implausibleFor(f, value) {
+    const v = String(value ?? '').trim();
+    if (!v || f.kind !== 'text') return null;
+    const type = (f.el?.type || '').toLowerCase();
+    const q = `${f.question || ''} ${f.el?.name || ''}`;
+
+    if (type === 'email' || /\be-?mail\b/i.test(q)) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+        return `refused: "${v}" is not an email address, but the field is an email field - the question was read as "${f.question}", which is probably mis-scoped`;
+      }
+    }
+    if (type === 'tel' || /\bphone\b/i.test(q)) {
+      if ((v.match(/\d/g) || []).length < 7) {
+        return `refused: "${v}" has too few digits for a phone number - the question was read as "${f.question}", which is probably mis-scoped`;
+      }
+    }
+    if (type === 'url' && !/^https?:\/\/|\w+\.\w{2,}/i.test(v)) {
+      return `refused: "${v}" is not a URL, but the field is a URL field`;
+    }
+    return null;
   }
 
   async function fillOne(f, value) {

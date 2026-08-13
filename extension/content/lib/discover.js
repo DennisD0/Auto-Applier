@@ -44,7 +44,10 @@
   }
 
   // A generic label tells you how to operate the control, not what it is for.
-  const GENERIC_FILE_LABEL = /^(attach|upload|choose file|browse|select file|add file|attach file)$/i;
+  const GENERIC_FILE_LABEL = /^(attach|attached|upload|uploaded|choose file|browse|select file|add file|attach file)$/i;
+
+  // "Dennis Do - Scrum Master.pdf" is a widget state readout, not a question.
+  const FILENAME = /\.(pdf|docx?|rtf|txt|odt|pages)$/i;
 
   /**
    * What a file input is actually asking for.
@@ -61,31 +64,81 @@
    */
   function fileQuestion(el) {
     const label = labelFor(el);
-    if (label && !GENERIC_FILE_LABEL.test(label)) return label;
+    // Always carry the id and name. A file input's visible text is whatever the widget is
+    // currently saying, which after an upload is the FILENAME - measured on Breezy, where
+    // labelFor() returned "Dennis Do - Scrum Master.pdf" on a revisit, matched no rule, and
+    // dropped the resume from the run with no error. The id/name never change with widget state.
+    if (label && !GENERIC_FILE_LABEL.test(label) && !FILENAME.test(label)) {
+      return clean(`${label} ${ident(el)}`);
+    }
 
     let node = el;
     for (let i = 0; i < 6 && node.parentElement; i++) {
       node = node.parentElement;
       const lead = leadingText(node, el);
       if (lead && !GENERIC_FILE_LABEL.test(lead.split(' ')[0])) {
-        return clean(`${lead} ${el.id || el.name || ''}`);
+        return clean(`${lead} ${ident(el)}`);
       }
     }
-    return clean(`${label} ${el.id || el.name || ''}`);
+    return clean(`${label} ${ident(el)}`);
   }
 
-  /** Text inside `container` that appears before `el` — i.e. the question above the input. */
+  /**
+   * Both `id` AND `name`, because either one alone can be the uninformative one.
+   *
+   * Breezy's resume input is `id="main-attachment" name="cResume"` - the id says nothing and the
+   * name says everything. Appending only `el.id || el.name` picked the id, the question never
+   * contained "resume", the rule never matched, and the field vanished from the run without an
+   * error. The surrounding text does carry "Upload Resume", but only until something is attached,
+   * after which it reads "Attached <filename>" - so it cannot be the thing this depends on.
+   */
+  const ident = (el) => clean(`${el.id || ''} ${el.name || ''}`);
+
+  // Inline validation and hint text sits in the DOM alongside the real label and is not part of
+  // the question. Breezy renders all of it up front, before anything is typed.
+  const NOISE = /(is required|are required|required field|please enter|please select|must be|invalid|^\*$|^required$|^optional$)/i;
+
+  /** Controls whose presence means the text before them belonged to THEM, not to `el`. */
+  function isControl(node) {
+    if (node.nodeType !== 1) return false;
+    const tag = node.tagName;
+    if (tag !== 'INPUT' && tag !== 'SELECT' && tag !== 'TEXTAREA') return false;
+    return !IGNORE_TYPES.has(node.type);
+  }
+
+  /**
+   * The question text for `el` — the text between the PREVIOUS control and this one.
+   *
+   * This used to collect every text node in `container` preceding `el` and join the lot. In a
+   * container holding several inputs that makes each field's question swallow all the ones above
+   * it, so on a live Breezy form the questions came out as "Personal Details Full Name", then
+   * "...Full Name A full name is required Email Address", then "...An email is required Phone
+   * Number". Every one of them still contained "Full Name", so the full-name rule matched all
+   * three and wrote "Gyeonghwan Do" into the name, email AND phone inputs — each reported ok,
+   * because the value did stick, just in the wrong field. Measured on Sports Reference 2026-08-13.
+   *
+   * So: reset the buffer every time the walk passes another control. Whatever text preceded that
+   * control describes it, not us.
+   */
   function leadingText(container, el) {
-    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
-    const out = [];
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+    let out = [];
     let n;
     while ((n = walker.nextNode())) {
-      if (el.contains(n) || n.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_PRECEDING) continue;
+      if (n === el) break;
+      if (n.nodeType === 1) {
+        // Ancestors of `el` are on the path to it and describe nothing on their own.
+        if (n.contains(el)) continue;
+        if (isControl(n)) out = [];   // that text belonged to the control we just passed
+        continue;
+      }
+      if (el.contains(n)) continue;
       const t = clean(n.textContent);
-      if (t) out.push(t);
-      if (out.join(' ').length > 220) break;
+      if (t && !NOISE.test(t)) out.push(t);
     }
-    return clean(out.join(' '));
+    // A question this long is a sign the scoping failed; keep the tail, which is nearest the input.
+    const joined = clean(out.join(' '));
+    return joined.length > 120 ? clean(joined.slice(-120)) : joined;
   }
 
   const clean = (s) => String(s || '').replace(/\s+/g, ' ').replace(/\*$/, '').trim();
