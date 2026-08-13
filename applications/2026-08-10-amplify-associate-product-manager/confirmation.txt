@@ -1,0 +1,13 @@
+Amplify — Associate Product Manager
+Submitted: 2026-08-10
+ATS: Ashby
+URL: https://jobs.ashbyhq.com/amplify/cbe758ef-1a66-4513-a263-e83b0d445c82/application
+
+Confirmation page text, captured verbatim:
+
+  Success
+  Your application was successfully submitted. We'll contact you if there are next steps.
+
+No withdraw link or application-status URL was offered on the confirmation page.
+Mode: assist — Dennis approved the submit explicitly in session; auto mode was never armed,
+so arm-auto.mjs record-submit was correctly NOT called and no window cap was decremented.

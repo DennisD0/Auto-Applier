@@ -1,0 +1,136 @@
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.6in}
+\addtolength{\textheight}{1.8in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-4pt}]
+
+\pdfgentounicode=1
+
+\newcommand{\resumeItem}[1]{\item\small{{#1 \vspace{-1pt}}}}
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-6pt}
+}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape Gyeonghwan (Dennis) Do} \\ \vspace{1pt}
+    \small 917-887-1991 $|$ \href{mailto:dennisnasa@gmail.com}{dennisnasa@gmail.com} $|$
+    \href{https://linkedin.com/in/dennis-do-coding}{linkedin.com/in/dennis-do-coding} $|$
+    \href{https://personal-portfolio-bice-pi.vercel.app/}{Portfolio}
+\end{center}
+
+%-----------SUMMARY-----------
+\section{Summary}
+\vspace{1pt}
+\small{Technical Project Manager and CS grad (Summer 2026) with a track record of delivering full-stack software on scope and on schedule. Led an 8-person cross-university team for NASA L'SPACE across 5 subsystems with 100\% on-time submission approval. Founder experience owning the full project lifecycle---requirements, sprint planning, deployment, and client delivery---accelerated by AI-assisted development.}
+\vspace{-6pt}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {CUNY Queens College}{Queens, NY}
+      {Bachelor of Arts in Computer Science}{Graduation: Summer 2026}
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {MavenStudio}{Remote}
+      {Founder \& Project Manager}{2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built an automated lead pipeline surfacing 200+ targeted B2B prospects per week, eliminating 90\% of manual prospecting overhead and creating a repeatable, documented intake process.}
+        \resumeItem{Managing 4+ client engagements simultaneously with a 2-week average turnaround from kickoff to deployed site, maintaining 100\% on-time delivery across all projects.}
+        \resumeItem{Maintaining a prioritized backlog across 3 active workstreams with a software engineer partner, resolving scope changes within 24 hours to keep all deliverables on schedule.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {AutoBulletin}{New York, NY}
+      {Technical Project Manager}{May 2026 -- Jul 2026}
+      \resumeItemListStart
+        \resumeItem{Scoped and delivered a workflow automation tool in 10 weeks that reduced a 4-hour weekly bulletin production process to under 15 minutes for a team of 8 staff members.}
+        \resumeItem{Managed a 5-language translation pipeline and QA audit, identifying and resolving 35+ translation errors before weekly distribution to a congregation of 200+ members.}
+        \resumeItem{Directed CI/CD deployment via GitHub Actions across 3 environments (local, staging, production) to a GCP VM, achieving 99\% uptime since launch.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {En Hakkore Cafe}{New York, NY}
+      {Technical Project Manager}{Feb 2026 -- May 2026}
+      \resumeItemListStart
+        \resumeItem{Managed full technical delivery of a mobile-ordering platform from requirements through deployment in 6 weeks, solo across all workstreams from kickoff to launch.}
+        \resumeItem{Defined technical requirements for a real-time queue system supporting 30+ concurrent orders, scoped within a \$0 infrastructure budget on Supabase and Vercel free tiers.}
+        \resumeItem{Ran a 5-scenario stress test suite (30 concurrent orders, 5 simultaneous registrations, full RLS verification) confirming zero data leaks or failures before go-live.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Scout}{New York, NY}
+      {Product Designer}{Oct 2025 -- Jan 2026}
+      \resumeItemListStart
+        \resumeItem{Drove product discovery and requirements definition for an early-stage startup, translating ambiguous objectives into structured problem statements, MVP scope, and prioritized backlogs.}
+        \resumeItem{Delivered 20+ high-fidelity screens across onboarding, discovery, and profile flows within a 2-week sprint, maintaining stakeholder alignment and on-time demo readiness.}
+        \resumeItem{Synthesized feedback across 2+ sprint cycles to balance user needs with technical feasibility, collaborating with 5+ cross-functional teammates.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {NASA L'SPACE}{New York, NY}
+      {Project Manager}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led an 8-member cross-university team across 5 technical subsystems, running Agile sprints and 6+ weekly stakeholder syncs to achieve 100\% on-time delivery.}
+        \resumeItem{Primary liaison to NASA reviewers, delivering technical presentations to mixed audiences and achieving 100\% submission approval across all review gates.}
+        \resumeItem{Directed a feasibility analysis synthesizing 20+ NASA/IEEE sources, producing a data-backed case for a 91\% cost reduction and 74+ EVA hours saved per mission.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------SKILLS-----------
+\section{Skills}
+\begin{itemize}[leftmargin=0.15in, label=\textbullet, itemsep=0pt]
+  \item \small{\textbf{Project Management:} Agile/Scrum, Scope Definition, Requirements Gathering, Sprint Planning, Milestone Tracking, Risk Mitigation, Stakeholder Management, Cross-Functional Leadership}
+  \item \small{\textbf{Technical Skills:} Full-Stack MVP Delivery, React, Next.js, Supabase, Vercel, GitHub Actions CI/CD, AI-Assisted Prototyping (Claude Code)}
+  \item \small{\textbf{Tools:} Figma, Git, Google Workspace, Google Cloud Platform}
+\end{itemize}
+
+\end{document}

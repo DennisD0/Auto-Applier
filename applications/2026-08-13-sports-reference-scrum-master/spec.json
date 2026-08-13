@@ -1,0 +1,14 @@
+{
+  "company": "Sports Reference",
+  "title": "Scrum Master",
+  "outDir": "applications/2026-08-13-sports-reference-scrum-master",
+  "summary": "Project and delivery manager and CS grad (Summer 2026) who led an 8-member cross-university team across 5 subsystems for NASA L'SPACE, running Agile sprint cycles and 6+ weekly stakeholder syncs to on-time delivery with 100% submission approval. Runs backlogs as structured Linear issues connected via MCP, 55+ across client work and 38 on a single product, cutting revision cycles from 3 rounds to 1 and aligning 3 stakeholders across 20 open-issue sprint reviews. Strong in milestone tracking, cross-functional facilitation, and turning ambiguous objectives into scoped, delivered work.",
+  "order": ["NASA L'SPACE", "AutoBulletin", "MavenStudio", "En Hakkore Cafe", "Scout"],
+  "bullets": {
+    "Scout": [
+      "Drove product discovery and requirements definition for an early-stage startup, translating ambiguous objectives into structured problem statements, MVP scope, and prioritized backlogs.",
+      "Delivered 20+ high-fidelity screens across onboarding, discovery, and profile flows within a 2-week sprint, maintaining stakeholder alignment and on-time demo readiness.",
+      "Synthesized feedback across 2+ sprint cycles to balance user needs with technical feasibility, collaborating with 3 to 5 cross-functional teammates."
+    ]
+  }
+}

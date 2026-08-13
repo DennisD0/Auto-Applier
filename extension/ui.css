@@ -1,0 +1,224 @@
+/* Auto-Apply design system — Minimalism & Swiss.
+   Dense, calm, high contrast. Semantic tokens only; no raw hex in components.
+   Light and dark are designed as a pair, each contrast-checked independently. */
+
+:root {
+  /* surface */
+  --bg:        #f6f8fa;
+  --surface:   #ffffff;
+  --surface-2: #f1f4f8;
+  --border:    #dbe1ea;
+  --border-strong: #c2cbd8;
+
+  /* text — body 4.5:1+, secondary 3:1+ on --surface */
+  --fg:        #16202e;
+  --fg-muted:  #5a6675;
+  --fg-subtle: #7b8695;
+
+  /* semantic state */
+  --assist:      #1d4ed8;  --assist-bg:  #e8efff;  --assist-br: #bed0fb;
+  --armed:       #14713a;  --armed-bg:   #dff5e6;  --armed-br:  #a6e0bb;
+  --danger:      #b3261e;  --danger-bg:  #fdeceb;  --danger-br: #f4bcb8;
+  --review:      #8a5300;  --review-bg:  #fdf1dc;  --review-br: #f0d19a;
+
+  --focus: #1d4ed8;
+
+  /* rhythm — 4pt scale */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 28px;
+  --r1: 6px; --r2: 9px; --r3: 13px;
+
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Inter, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  --dur: 180ms;
+  --ease: cubic-bezier(.2, .7, .3, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #0c1117;
+    --surface:   #151b24;
+    --surface-2: #1b232e;
+    --border:    #29323f;
+    --border-strong: #3a4553;
+
+    --fg:        #e8edf4;
+    --fg-muted:  #9aa7b013;   /* overridden below — kept explicit for clarity */
+    --fg-muted:  #a3b0c0;
+    --fg-subtle: #7f8c9c;
+
+    /* dark uses lighter, desaturated tonal variants — not inverted light values */
+    --assist:  #8ab0ff;  --assist-bg: #17233c;  --assist-br: #2c4373;
+    --armed:   #6edd9a;  --armed-bg:  #102a1b;  --armed-br:  #1f5636;
+    --danger:  #ff9d94;  --danger-bg: #2e1614;  --danger-br: #6b2a24;
+    --review:  #f0c07a;  --review-bg: #2b2011;  --review-br: #5e4520;
+
+    --focus: #8ab0ff;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 13px/1.5 var(--font);
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* numbers in logs and counts must not jitter as they update */
+.tnum, .log-meta, .count { font-variant-numeric: tabular-nums; }
+
+h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.01em; }
+h1 { font-size: 15px; }
+h2 { font-size: 13px; letter-spacing: .02em; text-transform: uppercase; color: var(--fg-muted); }
+p  { margin: 0; }
+
+a { color: var(--assist); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.muted   { color: var(--fg-muted); }
+.subtle  { color: var(--fg-subtle); font-size: 12px; }
+.stack   { display: grid; gap: var(--s3); }
+.row     { display: flex; align-items: center; gap: var(--s2); }
+.between { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); }
+.grow    { flex: 1; min-width: 0; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---- focus: never removed, always visible in both themes ---- */
+:where(button, input, textarea, select, a, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--r1);
+}
+
+/* ---- card ---- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r3);
+  padding: var(--s4);
+}
+
+/* ---- status banner: the most important element in the whole UI ---- */
+.status {
+  display: flex;
+  gap: var(--s3);
+  align-items: flex-start;
+  padding: var(--s3) var(--s4);
+  border-radius: var(--r3);
+  border: 1px solid;
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.status svg { flex: none; width: 18px; height: 18px; margin-top: 1px; }
+.status-title { font-weight: 650; font-size: 13px; letter-spacing: .01em; }
+.status-sub   { font-size: 12px; margin-top: 2px; opacity: .92; }
+
+/* state is conveyed by icon + text + colour, never colour alone */
+.is-assist { background: var(--assist-bg); border-color: var(--assist-br); color: var(--assist); }
+.is-armed  { background: var(--armed-bg);  border-color: var(--armed-br);  color: var(--armed); }
+.is-halt   { background: var(--danger-bg); border-color: var(--danger-br); color: var(--danger); }
+.is-review { background: var(--review-bg); border-color: var(--review-br); color: var(--review); }
+.status .status-sub { color: var(--fg-muted); }
+
+/* ---- buttons ---- */
+button {
+  font: inherit;
+  font-weight: 550;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r2);
+  padding: 7px 12px;
+  min-height: 32px;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+button:hover:not(:disabled) { background: var(--surface-2); }
+button:active:not(:disabled) { background: var(--border); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+
+button.primary { background: var(--assist); border-color: var(--assist); color: #fff; }
+button.primary:hover:not(:disabled) { filter: brightness(1.08); background: var(--assist); }
+@media (prefers-color-scheme: dark) { button.primary { color: #0c1117; } }
+
+button.danger { background: transparent; border-color: var(--danger-br); color: var(--danger); }
+button.danger:hover:not(:disabled) { background: var(--danger-bg); }
+
+button.ghost { border-color: transparent; background: transparent; color: var(--fg-muted); }
+button.ghost:hover:not(:disabled) { background: var(--surface-2); color: var(--fg); }
+
+/* ---- inputs ---- */
+input[type=text], input[type=password], input[type=number], textarea, select {
+  font: inherit;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r2);
+  padding: 7px 10px;
+  min-height: 32px;
+  width: 100%;
+  transition: border-color var(--dur) var(--ease);
+}
+input:hover, textarea:hover { border-color: var(--fg-subtle); }
+input::placeholder, textarea::placeholder { color: var(--fg-subtle); }
+textarea { font: 12px/1.6 var(--mono); resize: vertical; }
+input[type=number] { width: 68px; }
+
+label { font-size: 12px; font-weight: 550; color: var(--fg-muted); }
+.field { display: grid; gap: var(--s1); }
+.help  { font-size: 12px; color: var(--fg-subtle); line-height: 1.45; }
+
+/* ---- switch (dry run) ---- */
+.switch { display: flex; align-items: center; gap: var(--s2); cursor: pointer; min-height: 32px; }
+.switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+.track {
+  width: 34px; height: 20px; flex: none;
+  background: var(--border-strong); border-radius: 99px;
+  position: relative; transition: background var(--dur) var(--ease);
+}
+.track::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%; background: var(--surface);
+  transition: transform var(--dur) var(--ease);
+  box-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+.switch input:checked + .track { background: var(--assist); }
+.switch input:checked + .track::after { transform: translateX(14px); }
+.switch input:focus-visible + .track { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* ---- log rows ---- */
+.log { display: grid; }
+.log-row {
+  display: grid; grid-template-columns: 8px 1fr; gap: var(--s2);
+  padding: var(--s2) 0;
+  border-top: 1px solid var(--border);
+  align-items: start;
+}
+.log-row:first-child { border-top: none; }
+.dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 6px; background: var(--fg-subtle); }
+.dot.ok     { background: var(--armed); }
+.dot.review { background: var(--review); }
+.dot.no     { background: var(--danger); }
+.log-title { font-weight: 550; font-size: 12.5px; }
+.log-meta  { font-size: 11.5px; color: var(--fg-subtle); margin-top: 1px; }
+
+/* status word carries a label, so colour is never the only signal */
+.tag { font-size: 11px; font-weight: 650; letter-spacing: .03em; text-transform: uppercase; }
+.tag.ok { color: var(--armed); } .tag.review { color: var(--review); } .tag.no { color: var(--danger); }
+
+/* ---- table ---- */
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--fg-subtle); font-weight: 600; padding: 0 var(--s2) var(--s1) 0; }
+td { border-top: 1px solid var(--border); padding: var(--s2) var(--s2) var(--s2) 0; vertical-align: top; }
+
+/* ---- empty state ---- */
+.empty { padding: var(--s5) var(--s4); text-align: center; color: var(--fg-subtle); font-size: 12.5px; }
+
+/* ---- toast-ish inline confirmation ---- */
+.saved { color: var(--armed); font-size: 12px; font-weight: 550; }

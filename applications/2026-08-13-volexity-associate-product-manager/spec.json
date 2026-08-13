@@ -1,0 +1,14 @@
+{
+  "company": "Volexity",
+  "title": "Associate Product Manager",
+  "outDir": "applications/2026-08-13-volexity-associate-product-manager",
+  "summary": "Builder PM and CS grad (Summer 2026) who ships full-stack MVPs by directing AI coding agents (Claude Code, Codex), managing all feature and bug work as structured Linear issues connected via MCP. Directed CI/CD deployment automation through GitHub Actions across 3 environments to a Google Cloud VM at 99% uptime. Turns recurring customer problems into scoped product requirements, and communicates decision-ready material to technical and non-technical audiences. Strong in discovery, MVP scoping, and translating ambiguous objectives into shipped, measurable outcomes.",
+  "order": ["MavenStudio", "AutoBulletin", "En Hakkore Cafe", "NASA L'SPACE", "Scout"],
+  "bullets": {
+    "Scout": [
+      "Drove product discovery and requirements definition for an early-stage startup, translating ambiguous objectives into structured problem statements, MVP scope, and prioritized backlogs.",
+      "Delivered 20+ high-fidelity screens across onboarding, discovery, and profile flows within a 2-week sprint, maintaining stakeholder alignment and on-time demo readiness.",
+      "Synthesized feedback across 2+ sprint cycles to balance user needs with technical feasibility, collaborating with 3 to 5 cross-functional teammates."
+    ]
+  }
+}

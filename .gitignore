@@ -1,0 +1,24 @@
+# Poller scratch output (38MB of raw postings, regenerable) and, critically,
+# .cache/auto-arm.json — the live auto-mode arming state. Never commit that:
+# arm-auto.mjs status is the sole submit authority and must reflect this
+# machine right now, not whatever a checkout restored.
+.cache/
+
+# Node
+node_modules/
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Emergency stop file — machine-local, never restored from a commit
+HALT

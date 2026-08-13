@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Auto-Apply — Settings</title>
+<link rel="stylesheet" href="ui.css">
+<style>
+  .page { max-width: 780px; margin: 0 auto; padding: 0 var(--s5) var(--s6); }
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--s5);
+  }
+  .header-in { max-width: 780px; margin: 0 auto; padding: var(--s4) var(--s5); display: flex; align-items: center; justify-content: space-between; gap: var(--s3); }
+  .brand { display: flex; align-items: center; gap: var(--s2); font-weight: 650; font-size: 15px; }
+  .brand svg { width: 18px; height: 18px; color: var(--assist); }
+  section { margin-bottom: var(--s5); }
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s2); }
+  .req { font-size: 11px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; color: var(--danger); }
+  .opt { font-size: 11px; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; color: var(--fg-subtle); }
+
+  .slot { display: grid; grid-template-columns: 92px 1fr auto; gap: var(--s3); align-items: center; padding: var(--s3) 0; border-top: 1px solid var(--border); }
+  .slot:first-of-type { border-top: none; }
+  .slot-name { font-weight: 600; font-size: 12.5px; }
+  .slot-when { font-size: 11.5px; color: var(--fg-subtle); margin-top: 1px; }
+  .slot-state { font-size: 12px; font-weight: 550; text-align: right; white-space: nowrap; }
+  .slot-state.has { color: var(--armed); }
+  .slot-state.none { color: var(--fg-subtle); }
+  input[type=file] { font-size: 12px; max-width: 260px; }
+  input[type=file]::file-selector-button {
+    font: inherit; font-weight: 550; margin-right: var(--s2);
+    padding: 5px 10px; border-radius: var(--r1);
+    border: 1px solid var(--border-strong); background: var(--surface); color: var(--fg); cursor: pointer;
+  }
+  .caps { display: flex; gap: var(--s5); flex-wrap: wrap; }
+  .profile-card { display: grid; gap: var(--s4); }
+  .profile-grid { display: grid; gap: var(--s3); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .profile-grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .profile-grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .profile-block { padding-top: var(--s3); border-top: 1px solid var(--border); }
+  .profile-block:first-child { padding-top: 0; border-top: none; }
+  .profile-block h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--fg-subtle); margin: 0 0 var(--s2); }
+  .check-grid { display: grid; gap: var(--s2); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .check-item { display: flex; gap: var(--s2); align-items: center; min-height: 32px; color: var(--fg); }
+  .check-item input { width: auto; min-height: 0; }
+  .adv-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s2); }
+  #profile { min-height: 340px; }
+  #answers { min-height: 130px; }
+  .q { padding: var(--s3) 0; border-top: 1px solid var(--border); }
+  .q:first-child { border-top: none; }
+  .q-text { font-weight: 550; font-size: 12.5px; }
+  .q-opts { font-size: 11.5px; color: var(--fg-subtle); margin-top: 3px; }
+  .q-meta { font-size: 11.5px; color: var(--fg-subtle); margin-top: 3px; }
+  .import-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s2); }
+  .import-table th, .import-table td { vertical-align: top; }
+  .import-table th { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--fg-subtle); }
+  .import-table td { font-size: 12px; }
+  .import-check { width: 28px; text-align: center; }
+  .import-field { font-weight: 600; }
+  .import-from, .import-to { white-space: pre-wrap; word-break: break-word; }
+  .import-prov { color: var(--fg-subtle); font-size: 11.5px; }
+  @media (max-width: 760px) {
+    .profile-grid, .profile-grid.cols-3, .profile-grid.cols-4, .check-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <span class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      Auto-Apply settings
+    </span>
+    <div class="row">
+      <span id="saved" class="saved" role="status" aria-live="polite"></span>
+      <button class="primary" id="save">Save changes</button>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+
+  <!-- 1. Resumes — required, so it comes first -->
+  <section>
+    <div class="sec-head"><h2>Resumes</h2><span class="req">Required</span></div>
+    <p class="help" style="margin-bottom:var(--s3)">
+      Generate with <code>node scripts/resume-variants.mjs</code>, then attach from
+      <code>templates/variants/</code>. Picked automatically by job title. Without these, every
+      application stops for review.
+    </p>
+    <div class="card" id="resumes">
+      <div class="slot">
+        <div><div class="slot-name">Product</div><div class="slot-when">default</div></div>
+        <input type="file" accept="application/pdf" data-variant="product" aria-label="Attach product manager resume">
+        <div class="slot-state none" id="st-product">Not attached</div>
+      </div>
+      <div class="slot">
+        <div><div class="slot-name">Project</div><div class="slot-when">project · program · scrum · TPM</div></div>
+        <input type="file" accept="application/pdf" data-variant="project" aria-label="Attach project manager resume">
+        <div class="slot-state none" id="st-project">Not attached</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. The resolver loop -->
+  <section>
+    <div class="sec-head"><h2>Pending questions</h2><span class="subtle count" id="qcount"></span></div>
+    <p class="help" style="margin-bottom:var(--s3)">
+      Fields no rule recognized. Copy them into a Claude Code session, paste the answers back, and
+      they become permanent — each question is only ever asked once.
+    </p>
+    <div class="card stack">
+      <div class="row">
+        <button id="copyQ">Copy for Claude Code</button>
+        <button id="clearQ" class="ghost">Clear</button>
+      </div>
+      <div id="pending"></div>
+      <div class="field">
+        <label for="answers">Paste answers — JSON mapping question to answer</label>
+        <textarea id="answers" spellcheck="false" placeholder='{ "Have you participated in curriculum purchasing decisions?": "No" }'></textarea>
+        <div class="row"><button class="primary" id="saveAnswers">Save answers</button>
+          <span id="asaved" class="saved" role="status" aria-live="polite"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Profile -->
+  <section>
+    <div class="sec-head"><h2>Profile</h2></div>
+    <div class="status is-review" style="margin-bottom:var(--s3)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <div class="grow">
+        <div class="status-title">This is the anti-fabrication boundary</div>
+        <div class="status-sub">Answers may only be selected from what is here. Nothing gets invented — an unsupported question stays pending instead.</div>
+      </div>
+    </div>
+    <div class="card profile-card">
+      <form id="profileForm" class="stack">
+        <div class="profile-block">
+          <div class="import-head">
+            <div>
+              <h3>Import from Jobright</h3>
+              <div class="help">Reads an open <code>jobright.ai/jobs/profile</code> tab, shows a diff, and applies only the fields you keep checked.</div>
+            </div>
+            <div class="row">
+              <button id="jrProfileRead" class="ghost" type="button">Read open profile</button>
+              <button id="jrProfileApply" class="ghost" type="button" disabled>Apply selected to form</button>
+            </div>
+          </div>
+          <div id="jrProfileStatus" class="help"></div>
+          <div id="jrProfileReview" class="stack" style="margin-top:var(--s2)"></div>
+        </div>
+
+        <div class="profile-block">
+          <h3>Identity</h3>
+          <div class="profile-grid cols-4">
+            <div class="field"><label for="pf-legalFirstName">Legal first name</label><input type="text" id="pf-legalFirstName"></div>
+            <div class="field"><label for="pf-lastName">Last name</label><input type="text" id="pf-lastName"></div>
+            <div class="field"><label for="pf-preferredName">Preferred name</label><input type="text" id="pf-preferredName"></div>
+            <div class="field"><label for="pf-pronouns">Pronouns</label><input type="text" id="pf-pronouns"></div>
+          </div>
+          <div class="profile-grid">
+            <div class="field"><label for="pf-email">Email</label><input type="text" id="pf-email"></div>
+            <div class="field"><label for="pf-phone">Phone</label><input type="text" id="pf-phone"></div>
+          </div>
+        </div>
+
+        <div class="profile-block">
+          <h3>Address</h3>
+          <div class="profile-grid">
+            <div class="field"><label for="pf-streetAddress">Street address</label><input type="text" id="pf-streetAddress"></div>
+            <div class="field"><label for="pf-city">Home city</label><input type="text" id="pf-city"></div>
+          </div>
+          <div class="profile-grid cols-4">
+            <div class="field"><label for="pf-cityForForms">City for forms</label><input type="text" id="pf-cityForForms"></div>
+            <div class="field"><label for="pf-state">State</label><input type="text" id="pf-state"></div>
+            <div class="field"><label for="pf-zip">ZIP</label><input type="text" id="pf-zip"></div>
+            <div class="field"><label for="pf-country">Country</label><input type="text" id="pf-country"></div>
+          </div>
+        </div>
+
+        <div class="profile-block">
+          <h3>Work Preferences</h3>
+          <div class="profile-grid cols-3">
+            <div class="field"><label for="pf-startDate">Start date</label><input type="text" id="pf-startDate"></div>
+            <div class="field"><label for="pf-noticePeriod">Notice period</label><input type="text" id="pf-noticePeriod"></div>
+            <div class="field"><label for="pf-workModelPreference">Work model preference</label><input type="text" id="pf-workModelPreference"></div>
+          </div>
+          <div class="profile-grid">
+            <div class="field"><label for="pf-desiredSalaryNumber">Desired salary number</label><input type="text" id="pf-desiredSalaryNumber"></div>
+            <div class="field"><label for="pf-desiredSalaryText">Desired salary text</label><input type="text" id="pf-desiredSalaryText"></div>
+          </div>
+          <div class="profile-grid cols-3">
+            <div class="field"><label for="pf-openToRelocation">Open to relocation</label><input type="text" id="pf-openToRelocation" placeholder="Yes / No / Depends"></div>
+            <div class="field"><label for="pf-travelWillingness">Travel willingness</label><input type="text" id="pf-travelWillingness"></div>
+            <div class="field"><label for="pf-howDidYouHear">How did you hear</label><input type="text" id="pf-howDidYouHear"></div>
+          </div>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" id="pf-authorizedToWorkUS"><span>Authorized to work in the US</span></label>
+            <label class="check-item"><input type="checkbox" id="pf-requiresSponsorship"><span>Requires sponsorship</span></label>
+            <label class="check-item"><input type="checkbox" id="pf-age18OrOver"><span>18 or over</span></label>
+            <label class="check-item"><input type="checkbox" id="pf-subjectToRestrictiveAgreements"><span>Subject to restrictive agreements</span></label>
+            <label class="check-item"><input type="checkbox" id="pf-canTravelToNY"><span>Can travel to New York</span></label>
+            <label class="check-item"><input type="checkbox" id="pf-smsConsent"><span>SMS consent</span></label>
+          </div>
+          <div class="profile-grid">
+            <div class="field"><label for="pf-visaStatus">Visa status</label><input type="text" id="pf-visaStatus"></div>
+            <div class="field"><label for="pf-github">GitHub</label><input type="text" id="pf-github"></div>
+          </div>
+        </div>
+
+        <div class="profile-block">
+          <h3>Links and Education</h3>
+          <div class="profile-grid cols-3">
+            <div class="field"><label for="pf-linkedin">LinkedIn</label><input type="text" id="pf-linkedin"></div>
+            <div class="field"><label for="pf-portfolio">Portfolio</label><input type="text" id="pf-portfolio"></div>
+            <div class="field"><label for="pf-school">School</label><input type="text" id="pf-school"></div>
+          </div>
+          <div class="profile-grid cols-4">
+            <div class="field"><label for="pf-degree">Degree</label><input type="text" id="pf-degree"></div>
+            <div class="field"><label for="pf-highestEducation">Highest education</label><input type="text" id="pf-highestEducation"></div>
+            <div class="field"><label for="pf-fieldOfStudy">Field of study</label><input type="text" id="pf-fieldOfStudy"></div>
+            <div class="field"><label for="pf-graduationDate">Graduation date</label><input type="text" id="pf-graduationDate"></div>
+          </div>
+          <div class="profile-grid">
+            <div class="field"><label for="pf-gpa">GPA</label><input type="text" id="pf-gpa"></div>
+          </div>
+        </div>
+
+        <div class="profile-block">
+          <h3>EEO</h3>
+          <div class="profile-grid cols-3">
+            <div class="field"><label for="pf-eeo-gender">Gender</label><input type="text" id="pf-eeo-gender"></div>
+            <div class="field"><label for="pf-eeo-race">Race</label><input type="text" id="pf-eeo-race"></div>
+            <div class="field"><label for="pf-eeo-hispanic">Hispanic or Latino</label><input type="text" id="pf-eeo-hispanic"></div>
+            <div class="field"><label for="pf-eeo-veteran">Veteran status</label><input type="text" id="pf-eeo-veteran"></div>
+            <div class="field"><label for="pf-eeo-disability">Disability status</label><input type="text" id="pf-eeo-disability"></div>
+            <div class="field"><label for="pf-eeo-lgbtq">LGBTQ</label><input type="text" id="pf-eeo-lgbtq"></div>
+          </div>
+          <div class="profile-grid">
+            <div class="field"><label for="pf-eeo-orientation">Orientation</label><input type="text" id="pf-eeo-orientation"></div>
+          </div>
+        </div>
+
+        <div class="profile-block">
+          <h3>Long-Form Guidance</h3>
+          <div class="field">
+            <label for="pf-experienceSummary">Experience summary â€” one line per item</label>
+            <textarea id="pf-experienceSummary" spellcheck="false"></textarea>
+          </div>
+          <div class="field">
+            <label for="pf-constraints">Constraints â€” one line per item</label>
+            <textarea id="pf-constraints" spellcheck="false"></textarea>
+          </div>
+        </div>
+      </form>
+
+      <div class="profile-block">
+        <div class="adv-head">
+          <div>
+            <h3>Advanced JSON</h3>
+            <div class="help">Structured fields are the source of truth unless you explicitly apply edited JSON back into the form.</div>
+          </div>
+          <div class="row">
+            <button id="applyProfileJson" class="ghost" type="button">Apply JSON to form</button>
+            <button id="refreshProfileJson" class="ghost" type="button">Refresh JSON</button>
+          </div>
+        </div>
+        <textarea id="profile" spellcheck="false" aria-label="Profile JSON"></textarea>
+        <div class="row" style="margin-top:var(--s2)">
+          <button id="reset" class="ghost" type="button">Reset to seed</button>
+          <span class="help">Resumes and learned answers are managed above and kept out of this editor.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Caps -->
+  <section>
+    <div class="sec-head"><h2>Limits</h2></div>
+    <div class="card caps">
+      <div class="field">
+        <label for="maxPerDay">Max submits per day</label>
+        <input type="number" id="maxPerDay" min="1" max="50">
+      </div>
+      <div class="field">
+        <label for="minMatchPct">Minimum Jobright match</label>
+        <input type="number" id="minMatchPct" min="0" max="100">
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. API key — optional, deliberately last -->
+  <section>
+    <div class="sec-head"><h2>Anthropic API key</h2><span class="opt">Optional</span></div>
+    <p class="help" style="margin-bottom:var(--s3)">
+      Leave blank. API billing is separate from a Claude Pro subscription, and the pending-questions
+      loop above does the same job for free. Set a key only if you want unrecognized fields resolved
+      automatically with no round trip.
+    </p>
+    <input type="password" id="apiKey" placeholder="sk-ant-…" autocomplete="off">
+  </section>
+
+  <!-- 6. Debug bridge — a kill switch, not a feature -->
+  <section>
+    <div class="sec-head"><h2>Debug bridge</h2><span class="opt">Off unless asked for</span></div>
+    <p class="help" style="margin-bottom:var(--s3)">
+      Lets a script on your Jobright tab drive the extension, which is how a debugging session
+      runs one application at a time and reads the result. It is already inert unless the tab's
+      URL ends in <code>#aa-debug</code>. Tick this to disable it outright, hash or no hash.
+    </p>
+    <div class="card">
+      <label class="row" style="gap:var(--s2)">
+        <input type="checkbox" id="bridgeOff">
+        <span>Switch the debug bridge off completely</span>
+      </label>
+    </div>
+  </section>
+
+  <!-- 7. Review queue -->
+  <section>
+    <div class="sec-head"><h2>Review queue</h2></div>
+    <p class="help" style="margin-bottom:var(--s3)">Filled but not submitted, with the reason. Nothing here was sent.</p>
+    <div class="card"><table><tbody id="queue"></tbody></table></div>
+  </section>
+
+</div>
+<script src="options.js"></script>
+</body>
+</html>

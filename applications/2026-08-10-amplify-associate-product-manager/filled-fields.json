@@ -1,0 +1,153 @@
+{
+  "job": "Amplify — Associate Product Manager",
+  "ats": "ashby",
+  "applyUrl": "https://jobs.ashbyhq.com/amplify/cbe758ef-1a66-4513-a263-e83b0d445c82/application",
+  "discoveredVia": "jobright",
+  "jobrightId": "6a7497567b3417772ade067c",
+  "filledAt": "2026-08-10",
+  "mode": "assist",
+  "status": "submitted",
+  "fitScore": 80,
+  "fields": {
+    "Resume": {
+      "value": "resume.pdf (tailored, 1 page, pdflatex)",
+      "source": "applications/2026-08-10-amplify-associate-product-manager/resume.pdf",
+      "verified": true
+    },
+    "Legal Name": {
+      "value": "Gyeonghwan Do",
+      "source": "answers.md legal first + last",
+      "verified": true
+    },
+    "Email Address": {
+      "value": "dennisnasa@gmail.com",
+      "source": "answers.md",
+      "verified": true
+    },
+    "Mobile Number": {
+      "value": "917-887-1991",
+      "source": "answers.md",
+      "verified": true
+    },
+    "Text message consent": {
+      "value": "No - I do not consent",
+      "source": "Dennis 2026-08-10, explicit",
+      "verified": true
+    },
+    "Location - City and State": {
+      "value": "New York City, New York, United States",
+      "source": "gazetteer fallback — see note",
+      "verified": true
+    },
+    "How did you hear about this role": {
+      "value": "Company Website",
+      "source": "answers.md",
+      "verified": true
+    },
+    "Posted salary aligns with expectations": {
+      "value": "Yes",
+      "source": "derived: posted $115-125K exceeds desired $80-100K",
+      "verified": true
+    },
+    "Desired range (if not aligned)": {
+      "value": "",
+      "source": "left blank — not applicable",
+      "verified": true
+    },
+    "Legally authorized to work in US": {
+      "value": "Yes",
+      "source": "Dennis 2026-08-10, explicit",
+      "verified": true
+    },
+    "Require sponsorship": {
+      "value": "No",
+      "source": "Dennis 2026-08-10, explicit",
+      "verified": true
+    },
+    "Highest education completed": {
+      "value": "Bachelor degree",
+      "source": "master-resume.md — BA Computer Science, CUNY Queens",
+      "verified": true
+    },
+    "Travel to NY HQ": {
+      "value": "Yes",
+      "source": "Dennis 2026-08-10, explicit",
+      "verified": true
+    },
+    "Previously employed with Amplify": {
+      "value": "No",
+      "source": "answers.md",
+      "verified": true
+    },
+    "Previously engaged via agency/contractor": {
+      "value": "No",
+      "source": "answers.md",
+      "verified": true
+    },
+    "Currently working with Amplify": {
+      "value": "No",
+      "source": "answers.md",
+      "verified": true
+    },
+    "Website or LinkedIn": {
+      "value": "https://linkedin.com/in/dennis-do-coding",
+      "source": "answers.md",
+      "verified": true
+    },
+    "Earliest preferred start date": {
+      "value": "08/24/2026",
+      "source": "derived from 'Immediately' + notice period None — see note",
+      "verified": true
+    },
+    "Worked for school district / state ed agency": {
+      "value": "No",
+      "source": "master-resume.md — no such role",
+      "verified": true
+    },
+    "Curriculum purchasing decisions": {
+      "value": "No",
+      "source": "master-resume.md — no such role",
+      "verified": true
+    },
+    "Subject to restrictive agreements": {
+      "value": "No",
+      "source": "Dennis 2026-08-10, explicit",
+      "verified": true
+    },
+    "Gender (state law section)": {
+      "value": "Male",
+      "source": "jobright; Dennis authorized disclosure 2026-08-10",
+      "verified": false
+    },
+    "Gender (EEO section)": {
+      "value": "Male",
+      "source": "jobright; Dennis authorized disclosure 2026-08-10",
+      "verified": false
+    },
+    "Race": {
+      "value": "Asian (Not Hispanic or Latino)",
+      "source": "jobright; Dennis authorized disclosure 2026-08-10",
+      "verified": false
+    },
+    "Veteran status": {
+      "value": "I am not a protected veteran",
+      "source": "jobright",
+      "verified": true
+    },
+    "Disability status": {
+      "value": "No, I don't have a disability and have not had one in the past",
+      "source": "jobright",
+      "verified": false
+    }
+  },
+  "notes": [
+    "City: 'Fresh Meadows' is not in Amplify's location gazetteer, and neither is 'Queens'. The dropdown is city-level only, so 'New York City, New York, United States' was selected. Truthful — Fresh Meadows is in Queens, which is in NYC — but it is not the literal value in answers.md.",
+    "Start date: answers.md says 'Immediately' but this field is a date picker requiring a concrete date. 08/24/2026 chosen as the next Monday two weeks out, consistent with 'Immediately' plus notice period 'None'. Not a value Dennis stated verbatim.",
+    "No cover letter field and no free-text essay on this form, so no voice-profile drafting was required and the unverified-voice-profile risk does not apply to this application.",
+    "The four EEO fields marked verified:false were clicked and acknowledged by the tool but not individually re-read off the page; veteran status was visually confirmed. All are voluntary."
+  ],
+  "submittedAt": "2026-08-10",
+  "confirmation": "confirmation.txt",
+  "confirmationScreenshot": "confirmation.jpg",
+  "withdrawUrl": null
+}

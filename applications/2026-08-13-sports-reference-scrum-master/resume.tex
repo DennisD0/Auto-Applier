@@ -1,0 +1,133 @@
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.6in}
+\addtolength{\textheight}{1.8in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-6pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-4pt}]
+
+\pdfgentounicode=1
+
+\newcommand{\resumeItem}[1]{\item\small{{#1 \vspace{-1pt}}}}
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-6pt}
+}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-4pt}}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape Dennis (Gyeonghwan) Do} \\ \vspace{1pt}
+    \small 917-887-1991 $|$ \href{mailto:dennisnasa@gmail.com}{dennisnasa@gmail.com} $|$
+    \href{https://linkedin.com/in/dennis-do-coding}{linkedin.com/in/dennis-do-coding} $|$
+    \href{https://personal-portfolio-bice-pi.vercel.app/}{Portfolio}
+\end{center}
+
+%-----------SUMMARY-----------
+\section{Summary}
+\vspace{1pt}
+\small{Project and delivery manager and CS grad (Summer 2026) who led an 8-member cross-university team across 5 subsystems for NASA L'SPACE, running Agile sprint cycles and 6+ weekly stakeholder syncs to on-time delivery with 100\% submission approval. Runs backlogs as structured Linear issues connected via MCP, 55+ across client work and 38 on a single product, cutting revision cycles from 3 rounds to 1 and aligning 3 stakeholders across 20 open-issue sprint reviews. Strong in milestone tracking, cross-functional facilitation, and turning ambiguous objectives into scoped, delivered work.}
+\vspace{-6pt}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {CUNY Queens College}{Queens, NY}
+      {Bachelor of Arts in Computer Science}{Graduation: Summer 2026}
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {NASA L'SPACE}{New York, NY}
+      {Project Manager}{May 2025 -- Sep 2025}
+      \resumeItemListStart
+        \resumeItem{Led an 8-member cross-university team across 5 subsystems via Agile sprint cycles and 6+ weekly stakeholder syncs, tracking all milestones to on-time delivery.}
+        \resumeItem{Primary communicator to NASA reviewers, tailoring decision-ready materials to technical and non-technical audiences and achieving 100\% submission approval.}
+        \resumeItem{Synthesized 20+ NASA/IEEE sources in a feasibility analysis, modeling a projected 91\% cost reduction and 74+ EVA hours saved per mission.}
+      \resumeItemListEnd
+
+  
+    \resumeSubheading
+      {AutoBulletin}{New York, NY}
+      {Product Manager}{May 2026 -- Jul 2026}
+      \resumeItemListStart
+        \resumeItem{Identified a 4-hour weekly bottleneck where 3 staff members manually composed and formatted a bilingual bulletin in Word, and scoped a tool to collapse that process to under 15 minutes.}
+        \resumeItem{Shipped a multi-user web tool serving 8+ concurrent staff members with auto-translation across 5 languages and one-click PDF export, and directed CI/CD deployment via GitHub Actions across 3 environments to a Google Cloud VM, sustaining 99\% uptime since launch.}
+        \resumeItem{Defined a real-time collaboration system with editor locking and a 38-issue Linear backlog connected via MCP, cutting revision cycles from 3 rounds to 1, enabling Claude Code to autonomously create sub-tasks and enrich ticket notes, and aligning 3 staff stakeholders across 20 open-issue sprint reviews.}
+      \resumeItemListEnd
+    \resumeSubheading
+      {MavenStudio}{Remote}
+      {Founder \& Product Manager}{2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Built an automated lead pipeline scraping 200+ targeted B2B prospects per week, cutting manual prospecting time by 90\% and enabling same-day outreach at launch.}
+        \resumeItem{Directed AI coding agents (Claude Code, Codex) as SWEs by writing user stories and managing 55+ Linear issues connected via MCP, shipping 4 client websites at a 2-week average turnaround and converting outreach to paying customers within a 3-week sales cycle.}
+        \resumeItem{Iterating an SaaS MVP across 3 feedback cycles with a software engineer partner, narrowing a broad market into 2 validated, productizable pain points.}
+      \resumeItemListEnd
+    \resumeSubheading
+      {En Hakkore Cafe}{New York, NY}
+      {Product Manager}{Feb 2026 -- May 2026}
+      \resumeItemListStart
+        \resumeItem{Identified 2 core user pain points (wait-time uncertainty, no order visibility) and scoped a real-time mobile-ordering MVP delivered in 3 weeks, solo as PM and builder.}
+        \resumeItem{Defined a shareable order-code UX and real-time queue that enabled a 2-person staff to manage 30+ concurrent orders without a dedicated POS system.}
+        \resumeItem{Authored user stories and acceptance criteria for 30 Linear issues connected via MCP, giving AI coding agents (Claude Code, Codex) direct backlog access during development, and shipped a barista dashboard with a four-stage status workflow and sold-out toggles, reducing order errors by an estimated 40\% after reviewing 14 open tickets with the cafe owner across 3 discovery sessions.}
+      \resumeItemListEnd
+    \resumeSubheading
+      {Scout}{New York, NY}
+      {Product Designer}{Oct 2025 -- Jan 2026}
+      \resumeItemListStart
+        \resumeItem{Drove product discovery and requirements definition for an early-stage startup, translating ambiguous objectives into structured problem statements, MVP scope, and prioritized backlogs.}
+        \resumeItem{Delivered 20+ high-fidelity screens across onboarding, discovery, and profile flows within a 2-week sprint, maintaining stakeholder alignment and on-time demo readiness.}
+        \resumeItem{Synthesized feedback across 2+ sprint cycles to balance user needs with technical feasibility, collaborating with 3 to 5 cross-functional teammates.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+%-----------SKILLS-----------
+\section{Skills}
+\begin{itemize}[leftmargin=0.15in, label=\textbullet, itemsep=0pt]
+  \item \small{\textbf{Product Management:} Product Discovery, User Research, MVP Scoping, Roadmap Prioritization, Backlog Management, Stakeholder Management, Agile/Scrum, Go-to-Market, Rapid Prototyping}
+  \item \small{\textbf{AI-Assisted Building:} Directing AI coding agents (Claude Code, Codex) as SWEs across full-stack MVPs and internal automation tooling; managing work in Linear via MCP for autonomous agent backlog access; React, Next.js, Supabase, Vercel, Node.js; CI/CD via GitHub Actions to Google Cloud; browser automation and REST API integration}
+  \item \small{\textbf{Tools:} Figma, Git, GitHub Actions, Google Cloud Platform, Linear (MCP), Google Workspace}
+\end{itemize}
+
+\end{document}

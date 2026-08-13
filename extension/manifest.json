@@ -1,0 +1,69 @@
+{
+  "manifest_version": 3,
+  "name": "Auto-Apply — Jobright to ATS",
+  "version": "0.1.0",
+  "description": "Reads your Jobright recommendations, fills the real ATS application, and submits only when auto mode is explicitly armed.",
+  "permissions": ["storage", "tabs", "scripting", "alarms"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Auto-Apply",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": ["https://jobright.ai/*"],
+      "js": ["content/jobright.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://*.ashbyhq.com/*",
+        "https://*.greenhouse.io/*",
+        "https://*.lever.co/*",
+        "https://*.myworkdayjobs.com/*",
+        "https://*.workday.com/*",
+        "https://*.oraclecloud.com/*",
+        "https://*.icims.com/*",
+        "https://*.smartrecruiters.com/*",
+        "https://*.taleo.net/*",
+        "https://*.successfactors.com/*",
+        "https://*.bamboohr.com/*",
+        "https://*.jobvite.com/*",
+        "https://*.workable.com/*",
+        "https://*.breezy.hr/*",
+        "https://*.recruitee.com/*",
+        "https://*.teamtailor.com/*",
+        "https://*.pinpointhq.com/*",
+        "https://*.applytojob.com/*",
+        "https://*.avature.net/*",
+        "https://*.eightfold.ai/*",
+        "https://*.phenompeople.com/*",
+        "https://*.dayforcehcm.com/*",
+        "https://*.paylocity.com/*",
+        "https://*.personio.de/*",
+        "https://*.join.com/*"
+      ],
+      "js": [
+        "content/lib/setters.js",
+        "content/lib/discover.js",
+        "content/lib/rules.js",
+        "content/apply.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

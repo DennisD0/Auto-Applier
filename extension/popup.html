@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="ui.css">
+<style>
+  body { width: 360px; }
+  .wrap { padding: var(--s4); display: grid; gap: var(--s3); }
+  .head { display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: var(--s2); font-weight: 650; font-size: 14px; letter-spacing: -0.01em; }
+  .brand svg { width: 17px; height: 17px; color: var(--assist); }
+
+  /* segmented mode control — the primary decision in the whole UI */
+  .seg { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s1);
+         background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r3); padding: var(--s1); }
+  .seg button {
+    border: 1px solid transparent; background: transparent; border-radius: var(--r2);
+    padding: var(--s2) var(--s1); min-height: 48px; display: grid; gap: 1px; justify-items: center;
+    font-weight: 600; font-size: 12.5px; color: var(--fg-muted);
+  }
+  .seg button .sub { font-size: 10.5px; font-weight: 500; letter-spacing: .01em; }
+  .seg button[aria-pressed="true"] {
+    background: var(--surface); color: var(--fg);
+    border-color: var(--border-strong);
+    box-shadow: 0 1px 2px rgba(0,0,0,.06);
+  }
+  .seg button[aria-pressed="true"].auto-on { border-color: var(--armed-br); color: var(--armed); }
+
+  .autopanel { display: none; }
+  .autopanel.show { display: grid; gap: var(--s3); }
+  /* label · field · unit, so every number says what it counts */
+  .arm-row { display: grid; grid-template-columns: 58px 64px 1fr; gap: var(--s2) var(--s2); align-items: center; }
+  .arm-row label { white-space: nowrap; }
+  .unit { font-size: 12px; color: var(--fg-muted); }
+  .logwrap { max-height: 200px; overflow-y: auto; overscroll-behavior: contain; }
+
+  /* ---- "This page" — the tailoring panel ---- */
+  .jd { display: none; }
+  .jd.show { display: grid; gap: var(--s2); }
+  .jd-head { font-weight: 600; font-size: 12.5px; line-height: 1.35; }
+  .jd-sub { font-size: 11.5px; color: var(--fg-subtle); }
+  /* Verdict reads as a word first and a colour second, same rule as the log tags. */
+  .verdict { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 650;
+             letter-spacing: .04em; text-transform: uppercase; padding: 2px 7px; border-radius: 99px;
+             border: 1px solid; }
+  .verdict.apply  { color: var(--armed);  background: var(--armed-bg);  border-color: var(--armed-br); }
+  .verdict.review { color: var(--review); background: var(--review-bg); border-color: var(--review-br); }
+  .verdict.skip   { color: var(--danger); background: var(--danger-bg); border-color: var(--danger-br); }
+  .reasons { display: grid; gap: 3px; font-size: 11.5px; margin: 0; padding-left: 15px; }
+  .reasons li::marker { color: var(--fg-subtle); }
+  .reasons .bad { color: var(--danger); }
+  .chips { display: flex; flex-wrap: wrap; gap: 3px; }
+  .chip { font-size: 10.5px; padding: 1px 6px; border-radius: 99px;
+          background: var(--surface-2); border: 1px solid var(--border); color: var(--fg-muted); }
+  .quote { font-size: 11px; color: var(--fg-muted); border-left: 2px solid var(--border-strong);
+           padding-left: var(--s2); margin: 2px 0 0; }
+  /* File inputs are unstyleable across themes; the label is the button. */
+  .filebtn { display: inline-flex; align-items: center; justify-content: center; }
+  .filebtn input { position: absolute; width: 0; height: 0; opacity: 0; }
+  /* per-row remove: quiet until you're on the row, but always keyboard-reachable */
+  .del { min-height: 20px; padding: 2px; border: none; background: transparent;
+         color: var(--fg-subtle); border-radius: var(--r1); opacity: 0; }
+  .log-row:hover .del, .del:focus-visible { opacity: 1; }
+  .del:hover { background: var(--danger-bg); color: var(--danger); }
+  .halt-zone { border-top: 1px solid var(--border); padding-top: var(--s3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <span class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
+      </svg>
+      Auto-Apply
+    </span>
+    <button id="opts" class="ghost" style="min-height:28px;padding:4px 8px" aria-label="Open options and profile settings">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.31.4.55.71.66H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Reading and tailoring the posting in front of you. Independent of the Jobright queue and of
+       autofill: it works on any site and never touches the page. -->
+  <div class="card stack" style="padding:var(--s3);gap:var(--s2)">
+    <div class="between">
+      <h2>This page</h2>
+      <span class="subtle" id="jdSource"></span>
+    </div>
+    <button id="scan" class="primary" style="width:100%">Tailor for this page</button>
+    <p class="help" id="jdHint">Open a job posting on any site, then scan it.</p>
+
+    <div class="jd" id="jdPanel">
+      <div>
+        <div class="jd-head" id="jdTitle"></div>
+        <div class="jd-sub" id="jdCompany"></div>
+      </div>
+      <div class="row"><span class="verdict" id="jdVerdict"></span></div>
+      <ul class="reasons" id="jdReasons"></ul>
+      <div id="jdQuotes"></div>
+      <div class="chips" id="jdChips"></div>
+      <div class="row" style="gap:var(--s2);margin-top:var(--s1)">
+        <button id="copyBrief" class="grow">Copy tailoring brief</button>
+        <label class="filebtn" id="attachLabel">
+          <button id="attachBtn" type="button">Attach PDF</button>
+          <input type="file" id="tailoredFile" accept="application/pdf"
+                 aria-label="Attach the tailored resume PDF for this job">
+        </label>
+      </div>
+      <p class="help" id="jdAttached"></p>
+    </div>
+  </div>
+
+  <div class="seg" role="group" aria-label="Mode">
+    <button id="modeAssist" aria-pressed="true">Assist
+      <span class="sub">fills, never submits</span></button>
+    <button id="modeAuto" aria-pressed="false">Full auto
+      <span class="sub">fills and submits</span></button>
+  </div>
+
+  <!-- The dominant element. Answers "will this submit?" before anything else is read. -->
+  <div id="status" class="status is-assist" role="status" aria-live="polite">
+    <span id="statusIcon" aria-hidden="true"></span>
+    <div class="grow">
+      <div class="status-title" id="statusTitle">Assist</div>
+      <div class="status-sub" id="reason">Fills each application and leaves the tab open for you.</div>
+    </div>
+  </div>
+
+  <div class="autopanel" id="autopanel">
+    <div class="arm-row">
+      <label for="hours">Run for</label>
+      <input type="number" id="hours" value="2" min="1" max="72" aria-label="Hours to stay in full auto">
+      <span class="unit">hours <span class="subtle">(then stops on its own)</span></span>
+
+      <label for="max">Submit</label>
+      <input type="number" id="max" value="5" min="1" aria-label="Maximum applications to submit">
+      <span class="unit">applications <span class="subtle">at most</span></span>
+    </div>
+    <button id="startAuto" class="primary">Start full auto</button>
+  </div>
+
+  <div class="stack" style="gap:var(--s2)">
+    <button id="run" class="primary" style="width:100%">Run on Jobright list</button>
+    <!-- One posting, no scrolling. The right default when trying an unfamiliar ATS. -->
+    <button id="runOne" style="width:100%">Run one job</button>
+  </div>
+
+  <div class="card stack" style="padding:var(--s3)">
+    <div class="between">
+      <label for="minMatch">Only apply at or above</label>
+      <div class="row">
+        <input type="number" id="minMatch" min="0" max="100" step="5" style="width:64px" aria-label="Minimum Jobright match percentage">
+        <span class="subtle">% match</span>
+      </div>
+    </div>
+    <p class="help" id="matchHint">&nbsp;</p>
+  </div>
+
+  <div class="stack" style="gap:var(--s2)">
+    <div class="between">
+      <h2>Recent runs</h2>
+      <span class="row" style="gap:var(--s2)">
+        <span class="subtle count" id="counts"></span>
+        <button id="clearRuns" class="ghost" style="min-height:24px;padding:2px 7px;font-size:11.5px">Clear incomplete</button>
+      </span>
+    </div>
+    <div class="logwrap"><div class="log" id="log"></div></div>
+  </div>
+
+  <div class="halt-zone">
+    <button id="halt" class="danger" style="width:100%">Halt all automation</button>
+  </div>
+
+</div>
+<script src="popup.js"></script>
+</body>
+</html>
