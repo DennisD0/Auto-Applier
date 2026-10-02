@@ -1,0 +1,28 @@
+{
+  "company": "BNY",
+  "title": "Design Operations Specialist",
+  "outDir": "applications/2026-10-02-bny-design-operations-specialist",
+  "summary": "Builder PM and CS grad (Summer 2026) who directs AI coding agents (Claude Code, Codex) as SWEs by writing user stories and managing all feature and bug work as structured Linear issues connected via MCP. Led an 8-member cross-university team across 5 subsystems for NASA L'SPACE, running Agile sprints and 6+ weekly stakeholder syncs as primary communicator to technical and non-technical reviewers. Comfortable inside a design practice, having delivered 20+ high-fidelity Figma screens and prioritized backlogs at Scout. Finds pain points in internal process and scopes the fix, including a 4-hour weekly bottleneck collapsed to under 15 minutes. Operates across 3 active workstreams, resolving scope changes within 24 hours.",
+  "order": ["MavenStudio", "AutoBulletin", "En Hakkore Cafe", "Scout", "NASA L'SPACE"],
+  "bullets": {
+    "MavenStudio": [
+      "Managed 4+ concurrent client engagements at 100% on-time delivery, maintaining a prioritized backlog across 3 active workstreams and resolving scope changes within 24 hours.",
+      "Directed AI coding agents (Claude Code, Codex) as SWEs by writing user stories and managing 55+ Linear issues connected via MCP, shipping 4 client websites at a 2-week average turnaround and converting outreach to paying customers within a 3-week sales cycle.",
+      "Iterating an SaaS MVP across 3 feedback cycles with a software engineer partner, narrowing a broad market into 2 validated, productizable pain points."
+    ],
+    "AutoBulletin": [
+      "Proactively identified a 4-hour weekly bottleneck where 3 staff members manually composed and formatted a bilingual bulletin in Word, and scoped a tool to collapse that process to under 15 minutes.",
+      "Shipped a multi-user web tool serving 8+ concurrent staff members with auto-translation across 5 languages and one-click PDF export, removing manual formatting from the weekly workflow entirely.",
+      "Defined a real-time collaboration system with editor locking and a 38-issue Linear backlog connected via MCP, cutting revision cycles from 3 rounds to 1 and aligning 3 staff stakeholders across 20 open-issue sprint reviews."
+    ],
+    "Scout": [
+      "Drove product discovery and requirements definition for an early-stage startup, translating ambiguous objectives into structured problem statements, MVP scope, and prioritized backlogs.",
+      "Delivered 20+ high-fidelity Figma screens across onboarding, discovery, and profile flows within a 2-week sprint, maintaining stakeholder alignment and on-time demo readiness.",
+      "Synthesized feedback across 2+ sprint cycles to balance user needs with technical feasibility, collaborating across 3 to 5 cross-functional teammates."
+    ]
+  },
+  "skills": {
+    "Product Management": "Stakeholder Management, Cross-Functional Leadership, Sprint Planning, Milestone Tracking, Scope Definition, Requirements Gathering, Risk Mitigation, Agile/Scrum, Backlog Management, Roadmap Prioritization, Product Discovery, User Research",
+    "Tools": "Figma, Google Workspace, Linear (MCP), Git, GitHub Actions, Google Cloud Platform"
+  }
+}
